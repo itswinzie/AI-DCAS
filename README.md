@@ -63,7 +63,7 @@ _(Diagram/Description coming soon)_
 
 ```bash
 # Clone the repository
-git clone https://github.com/your-username/AI-DCAS.git
+git clone https://github.com/itswinzie/AI-DCAS.git
 cd AI-DCAS
 
 # Create a virtual environment (recommended)
