@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI DCAS - Panel Kawalan Demo</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 40px 20px;
+            min-height: 100vh;
+            box-sizing: border-box;
+        }
+        .container {
+            width: 100%;
+            max-width: 550px;
+            background: #ffffff;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #1c1e21;
+            margin-bottom: 2rem;
+            font-size: 1.8rem;
+        }
+        .alert {
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            border-radius: 6px;
+            text-align: center;
+            font-weight: 500;
+        }
+        .alert-success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .alert-error { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .form-section {
+            border: 1px solid #dddfe2;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-top: 1.5rem;
+        }
+        h3 {
+            margin-top: 0;
+            color: #333;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 0.75rem;
+            margin-bottom: 1.2rem;
+            font-size: 1.2rem;
+        }
+        .form-group { margin-bottom: 1rem; }
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #606770;
+            font-size: 0.9rem;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #dddfe2;
+            border-radius: 6px;
+            box-sizing: border-box;
+            font-size: 1rem;
+        }
+        input[type="text"]:focus {
+            border-color: #1877f2;
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(24, 119, 242, 0.2);
+        }
+        button, .button-link {
+            background-color: #1877f2;
+            color: white;
+            padding: 0.8rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1rem;
+            width: 100%;
+            font-weight: bold;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            box-sizing: border-box;
+            transition: background-color 0.2s, transform 0.1s;
+        }
+        button:hover, .button-link:hover { background-color: #166fe5; }
+        button:active, .button-link:active { transform: scale(0.98); }
+        .delete-button { background-color: #fa3e3e; }
+        .delete-button:hover { background-color: #e03838; }
+        .main-action-button { background-color: #42b72a; margin-bottom: 1rem; padding: 1rem; font-size: 1.2rem; }
+        .main-action-button:hover { background-color: #36a420; }
+        .report-button { background-color: #17a2b8; margin-bottom: 1.5rem; }
+        .report-button:hover { background-color: #138496; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Panel Kawalan AI DCAS</h1>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <!-- Butang ke Halaman Laporan (DIKEMBALIKAN) -->
+        <a href="{{ url_for('dashboard') }}" class="button-link report-button">Lihat Laporan Kehadiran</a>
+
+        <!-- Butang Utama: Mula Pengecaman Wajah -->
+        <form method="post" action="/run_script">
+            <input type="hidden" name="script" value="recognize_faces.py">
+            <button type="submit" class="main-action-button">Mula Sesi Kehadiran</button>
+        </form>
+
+        <!-- Borang 1: Ambil Gambar Wajah -->
+        <form method="post" action="/run_script">
+            <div class="form-section">
+                <h3>Langkah 1: Ambil Gambar Wajah</h3>
+                <div class="form-group">
+                    <label for="nama_capture">Nama Pelajar:</label>
+                    <input type="text" id="nama_capture" name="nama_pelajar" placeholder="Cth: MUHAMMAD IRWAN BIN ZAKARIA" required>
+                </div>
+                <input type="hidden" name="script" value="capture_images.py">
+                <button type="submit">Buka Kamera & Ambil Gambar</button>
+            </div>
+        </form>
+
+        <!-- Borang 2: Daftar Pelajar ke Sistem -->
+        <form method="post" action="/run_script">
+             <div class="form-section">
+                <h3>Langkah 2: Daftar Maklumat Pelajar</h3>
+                <div class="form-group">
+                    <label for="nama_enroll">Nama Pelajar:</label>
+                    <input type="text" id="nama_enroll" name="nama_pelajar" placeholder="Pastikan nama sama dengan di atas" required>
+                </div>
+                <div class="form-group">
+                    <label for="no_matrik_enroll">No. Matrik:</label>
+                    <input type="text" id="no_matrik_enroll" name="no_matrik" placeholder="Cth: 13DTK23F1004" required>
+                </div>
+                <input type="hidden" name="script" value="enroll_student.py">
+                <button type="submit">Daftarkan Maklumat</button>
+            </div>
+        </form>
+
+        <!-- Borang 3: Padam Pelajar -->
+        <form method="post" action="/run_script">
+            <div class="form-section">
+                <h3>Tindakan Tambahan: Padam Pelajar</h3>
+                 <div class="form-group">
+                    <label for="no_matrik_delete">No. Matrik:</label>
+                    <input type="text" id="no_matrik_delete" name="no_matrik" placeholder="Masukkan no. matrik untuk dipadam" required>
+                </div>
+                <input type="hidden" name="script" value="delete_student.py">
+                <button type="submit" class="delete-button">Padam Pelajar</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
