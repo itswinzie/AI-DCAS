@@ -14,7 +14,6 @@ def create_connection(db_file):
     try:
         conn = sqlite3.connect(db_file)
     except sqlite3.Error as e:
-        # Apabila skrip dijalankan dari command-line, kita mahu ralat dipaparkan di stderr
         print(f"DB Error: {e}", file=sys.stderr)
     return conn
 
