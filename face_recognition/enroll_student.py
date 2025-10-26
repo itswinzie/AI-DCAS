@@ -1,10 +1,9 @@
-# enroll_student.py (Versi Diperbaiki untuk Command-Line)
 import sqlite3
 import face_recognition
 import os
 import numpy as np
 import re
-import sys # <-- PENTING: Import sys untuk akses argumen & exit
+import sys 
 
 DB_NAME = "attendance_system.db"
 DATASET_BASE_DIR = "dataset"
