@@ -21,7 +21,6 @@ class AttendanceSystem:
         self.MAX_STUDENTS_IN_DISPLAY_LIST = 7
         self.FACE_MATCHING_TOLERANCE = 0.45
         
-        # [PERUBAHAN] Menala ambang untuk pengesanan yang lebih baik
         self.EAR_THRESHOLD = 0.25      # Naikkan sedikit untuk lebih sensitiviti
         self.EAR_CONSEC_FRAMES = 2     # Kurangkan frame untuk pengesanan lebih pantas
         
